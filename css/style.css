@@ -32,19 +32,19 @@
 
 .custom-list li {
     display: inline-block;
-    margin-right: 5px; /* Adjust as needed */
+    margin-right: 5px; 
 }
 
 .custom-list li:not(:last-child):after {
     content: "\00B7"; /* Unicode for middle dot character */
-    margin-left: 5px; /* Adjust as needed */
-    margin-right: 5px; /* Adjust as needed */
+    margin-left: 5px; 
+    margin-right: 5px; 
 }
 
 .custom-div {
-    background-color: #f0f0f0; /* Light background color */
-    padding: 10px; /* Adjust as needed */
-    border-radius: 5px; /* Add some border radius for rounded corners */
+    background-color: #f0f0f0; 
+    padding: 10px; 
+    border-radius: 5px;
 }
 
 .account-action {
@@ -80,9 +80,133 @@
 }
 
 #timeSpan {
-    margin-left: 0.5em;
+    margin-left: 0.2em;
+}
+
+#daysLeft {
+    margin-right: 0.2em;
 }
 
 .event-list {
     background-color: #f8f9fa;
+}
+
+.account-track {
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+}
+
+.balances-cont {
+    background-color: #f8f9fa;
+}
+
+#percentChange {
+    font-size: 0.8em;
+    position: relative;
+    top: 0.2em;
+}
+
+#mobBalance {
+    font-weight: 500;
+}
+.out-balance {
+    text-align: center;
+}
+
+.out-balance #staticBalance {
+    display: inline-block;
+}
+
+.out-balance #percentChange {
+    display: inline-block;
+}
+
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
+
+.neutral {
+    color: orange;
+}
+
+.receipts {
+    height: 200px !important;
+    overflow-y: auto;
+}
+
+.overlay-light {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.overlay-dark {
+    top: 0;
+    left: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#bankPopup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    width: 400px;
+    transform: translate(-50%);
+    background-color: #fff;
+    display: none;
+}
+
+#bankPopup h3 {
+    text-align: center;
+}
+
+.bottom-form-btn button {
+    display: inline-block;
+}
+
+.loading-circle {
+    width: 2rem; 
+    height: 2rem; 
+    border: 0.25rem solid transparent;
+    border-top-color: #007bff; 
+    border-radius: 50%;
+    animation: spin 1s linear infinite; 
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 25px;
+    display: none;
+}
+
+#loadStatus {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#statusBar {
+    position: absolute;
+    top: 68px;
+    left: 5px;
+    background-color: #46ad9c;
+    color: #fff;
+    border-radius: 10px;
+    display: none;
 }
