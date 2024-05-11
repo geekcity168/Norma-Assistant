@@ -1,0 +1,14 @@
+
+
+
+.profile-cont {
+    height: 80px !important;
+    width: 80px;
+    
+}
+
+.profile-cont img {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+}
