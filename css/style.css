@@ -1,5 +1,10 @@
 
 
+.navbar-brand img {
+    width: 40px;
+    height: auto; 
+    margin-right: 10px; 
+}
 
 .profile-cont {
     height: 80px !important;
@@ -11,4 +16,54 @@
     border-radius: 50%;
     height: 100%;
     width: 100%;
+}
+
+.bottom-acc-profile {
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.custom-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.custom-list li {
+    display: inline-block;
+    margin-right: 5px; /* Adjust as needed */
+}
+
+.custom-list li:not(:last-child):after {
+    content: "\00B7"; /* Unicode for middle dot character */
+    margin-left: 5px; /* Adjust as needed */
+    margin-right: 5px; /* Adjust as needed */
+}
+
+.custom-div {
+    background-color: #f0f0f0; /* Light background color */
+    padding: 10px; /* Adjust as needed */
+    border-radius: 5px; /* Add some border radius for rounded corners */
+}
+
+.account-action {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 18px;
+    border-radius: 8px;
+}
+
+.custom-container-img {
+    text-align: center;
+}
+
+.custom-container-img .inline-img-heading {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.custom-container-img .inline-img-heading img {
+    height: 3em;
+    display: inline-block;
 }

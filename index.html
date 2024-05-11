@@ -11,7 +11,9 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Norma Assistant</a>
+            <a class="navbar-brand" href="#">
+                <img src="assets/img/na-logo.png" alt="">
+                Norma Assistant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -50,12 +52,39 @@
                             someone@example.com
                         </div>
                         <hr>
+                        <div class="m-3 p-3 bottom-acc-profile">
+                            <p class="mb-3">Connect to account</p>
+                            <button type="button" class="btn btn-light">Add Bank</button>
+                            <br>
+                            <div id="bankLists">
+                                <div class="p-3 mb-3 custom-div">
+                                    <ul class="custom-list">
+                                        <li id="bankName">KCB Bank</li>
+                                        <li id="accountName">John Doe</li>
+                                        <li id="accountNumber">0393827736654624772653503</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-light">Connect to Mobile</button>
+                            <div id="bankLists">
+                                <div class="p-3 mb-3 custom-div">
+                                    <ul class="custom-list">
+                                        <li id="mobileService">MPESA</li>
+                                        <li id="mobileNumber">0700000000</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4 mb-3">
-                <div class="custom-container p-3">
-                    
+            <div class="col-sm-12 col-md-4 mb-3 account-action">
+                <div class="custom-container-img p-3">
+                    <div class="inline-img-heading">
+                        <img src="assets/img/na-logo-sm.png" alt="">
+                    </div>
+                    <h5 class="display-8 m-3 text-uppercase text-secondary inline-img-heading">Norma Account Monitor</h5>
+                    <hr>
                 </div>
             </div>
             <div class="col-sm-12 col-md-4 mb-3">
