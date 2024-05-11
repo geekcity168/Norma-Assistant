@@ -64,6 +64,25 @@
 }
 
 .custom-container-img .inline-img-heading img {
-    height: 3em;
+    height: 5em;
     display: inline-block;
+    border-radius: 6px;
+}
+
+.events {
+    box-sizing: border-box;
+    background-color: #f0f0f0;
+}
+
+#eventsLists {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#timeSpan {
+    margin-left: 0.5em;
+}
+
+.event-list {
+    background-color: #f8f9fa;
 }
