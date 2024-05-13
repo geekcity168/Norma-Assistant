@@ -189,7 +189,7 @@
     display: none;
 }
 
-#loadStatus {
+.loading-status {
     display: inline-block;
     vertical-align: middle;
     margin-left: 10px;
@@ -209,4 +209,60 @@
     color: #fff;
     border-radius: 10px;
     display: none;
+}
+
+
+#mobilePopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    display: none;
+}
+
+.signup-left {
+    background-color: #97a4b3;
+    height: 100%;
+
+}
+
+.signup-left h3 {
+    text-align: center;
+    color: #e2dede !important;
+    
+}
+
+.signup-left h4 {
+    text-align: center;
+}
+
+.banner-container {
+    width: 100%;
+}
+
+.banner-container img {
+    width: 100%;
+}
+
+.signup-right {
+    border: #97a4b3 solid 1px;
+    
+}
+
+
+.signup-cont {
+    width: 60%;
+    margin: auto;
+}
+
+.signup-cont h3 {
+    text-align: center;
+}
+
+#status {
+    text-align: center;
+    background-color: #4d627a !important;
+    color: #fff;
 }

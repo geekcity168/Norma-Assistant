@@ -70,20 +70,40 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 
     function checkBankDetails() {
-        bankPopupOverlay.style.display = "none";
-        bankPopup.style.display = "none";
-
-        statusBar.style.display = "block";
-        statusBar.innerHTML = "Account added successfully";
-
-        bankName.innerHTML = selectedBank.value;
-        accountNumber.innerHTML = accountnumber.value;
-        setTimeout(closeStatus, 3500);
+        var selectedBank = document.getElementById("bankSelect").value;
+        var accountNumber = document.getElementById("accountnumber").value;
+    
+        // Create FormData object to send form data
+        var formData = new FormData();
+        formData.append('bankName', selectedBank);
+        formData.append('accountNumber', accountNumber);
+    
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "add_bank_process.php", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                if (response === "success") {
+                    statusBar.style.display = "block";
+                    statusBar.innerHTML = "Account added successfully";
+                    bankName.innerHTML = selectedBank;
+                    accountNumber.innerHTML = accountNumber;
+                    setTimeout(closeStatus, 3500);
+                } else {
+                    alert("An error occurred while adding the bank account. Please try again.");
+                }
+            }
+        };
+        xhr.send(formData);
     }
+    
 
     function closeStatus() {
         statusBar.style.display = "none";
     }
+
+    
+    
 });
 
 function formatAccountNumber(input) {
@@ -149,4 +169,46 @@ function formatCVC(input) {
 
     input.value = value;
 }
+
+
+document.getElementById("addMobileOverlay").addEventListener("click", function() {
+    console.log("Button clicked");
+
+    var addMobileOverlay = document.getElementById("addMobileOverlay");
+    var mobilePhone = document.getElementById("mobile-phone");
+
+    if (mobilePhone.value !== "") {
+
+        var confirmResponse = confirm("Do you want to close without saving changes?");
+
+        if (confirmResponse = true) {
+            addMobileOverlay.style.display = "none";
+            mobilePopup.style.display = "none";
+            return;
+        }
+
+        else {
+            addMobileOverlay.style.display = "block";
+            mobilePopup.style.display = "block";
+        }
+
+    } else {
+        addMobileOverlay.style.display = "none";
+        mobilePopup.style.display = "none";
+    }
+});
+
+function closeMobileWindow() {
+    var addMobileOverlay = document.getElementById("addMobileOverlay");
+    var mobilePhone = document.getElementById("mobile-phone");
+
+    addMobileOverlay.style.display = "none";
+    mobilePopup.style.display = "none";
+
+}
+
+
+
+
+
 

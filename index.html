@@ -31,6 +31,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Account
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="login.html">Login</a></li>
+                          <li><a class="dropdown-item" href="signup.html">Create Account</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -46,10 +57,10 @@
                             <img src="assets/img/pp.png" alt="">
                         </div>
                         <div id="userName" class="m-3 text-primary display-8 text-uppercase">
-                            John Doe
+                            <!-- User name will be displayed here -->
                         </div>
-                        <div class="m-3 display-8">
-                            someone@example.com
+                        <div class="m-3 display-8" id="userEmail">
+                            <!-- User email will be displayed here -->
                         </div>
                         <hr>
                         <div class="m-3 p-3 bottom-acc-profile">
@@ -65,7 +76,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-light mb-3">Connect to Mobile</button>
+                            <button type="button" class="btn btn-light mb-3" onclick="addMobileAccount()">Connect to Mobile</button>
                             <div id="bankLists">
                                 <div class="p-3 mb-3 custom-div">
                                     <ul class="custom-list">
@@ -90,12 +101,12 @@
                         <div class="m-1 p-2 balances-cont">
                             <h3 class="m-1 fs-5 display-6">Outstanding Balance</h3>
                             <div class="mb-3  out-balance">
-                                <div class="fs-4 display-8" id="staticBalance">Ksh.12,000</div>
-                                <span id="percentChange">+23%</span>
+                                <div class="fs-4 display-8" id="staticBalance">Ksh.0</div>
+                                <span id="percentChange">0%</span>
                             </div>
                             <h3 class="m-1 fs-5 display-6">Mobile Account Balance</h3>
                             <div class="mb-3  out-balance">
-                                <div class="fs-7 display-8" id="mobBalance">Ksh.7000</div>
+                                <div class="fs-7 display-8" id="mobBalance">Ksh.0</div>
                             </div>
                         </div>
                     </div>
@@ -202,9 +213,38 @@
             <div class="bottom-form-btn">
                 <button type="submit" class="btn btn-primary" id="bankSubmit">Check Account</button>
                 <div class="loading-circle"></div>
-                <div class="fs-7" id="loadStatus">Checking account...</div>
+                <div class="fs-7 loading-status" id="loadStatus">Checking account...</div>
             </div>
           </form>
+    </div>
+
+    <!-- Add Mobile Account -->
+    <div class="overlay-dark" id="addMobileOverlay"></div>
+    <div class="p-4" id="mobilePopup">
+        <h3 class="mb-3 fs-5 display-8">Add Mobile Money Account</h3>
+        <form>
+            <div class="mb-3">
+                <label for="mobile-platform" class="form-label">Mobile money platform</label>
+                <select id="mobile-platform" class="form-select">
+                    <option value="MPESA">MPESA</option>
+                    <option value="Airtel Money">Airtel Money</option>
+                    <option value="T-Kash">T-Kash</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="mobile-phone">Mobile Phone Number</label>
+                <input type="number" class="form-control" id="mobile-phone">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="terms">
+                <label class="form-check-label" for="terms">Agree to terms and conditions</label>
+            </div>
+            <div class="bottom-form-btn">
+                <button type="submit" class="btn btn-primary" id="mobileSubmit">Check Account</button>
+                <div class="loading-circle" id="mobileLoad"></div>
+                <div class="fs-7 mt-3 loading-status" id="mobileLoadSatus">Checking mobile account...</div>
+            </div>
+        </form>
     </div>
 
     <!-- Status Bar -->
@@ -216,3 +256,90 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+<script>
+    var addMobileOverlay = document.getElementById("addMobileOverlay");
+    var mobilePopup = document.getElementById("mobilePopup");
+
+    function addMobileAccount() {
+        addMobileOverlay.style.display = "block";
+        mobilePopup.style.display = "block";
+
+        var mobileSubmit = document.getElementById("mobileSubmit");
+        mobileSubmit.addEventListener("click", function(event){
+            event.preventDefault();
+            console.log("Success");
+
+
+            var mobilePlatform = document.getElementById("mobile-platform");
+            var mobilePhone = document.getElementById("mobile-phone");
+
+            if (mobilePhone.value == "") {
+                alert("Please enter mobile number");
+            }
+
+            else {
+                var mobileLoad = document.getElementById("mobileLoad");
+                var mobileLoadSatus = document.getElementById("mobileLoadSatus");
+
+                mobileLoad.style.display = "inline-block";
+                mobileLoadSatus.style.display = "inline-block";
+
+                setTimeout(() => {
+                    mobileLoad.style.display = "none";
+                    mobileLoadSatus.style.display = "none";
+
+
+                    closeMobileWindow();
+
+                    document.getElementById("mobileService").innerHTML = mobilePlatform.value;
+                    document.getElementById("mobileNumber").innerHTML = mobilePhone.value;
+
+                    statusBar.style.display = "block";
+                    statusBar.innerHTML = "Mobile Account added successfully";
+
+
+
+                    setInterval(() => {
+                        statusBar.style.display = "none";
+                    }, 3500);
+
+
+                    
+                }, 5600);
+            }
+            
+        });
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Function to retrieve user data via AJAX
+        function getUserData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "php/get_user_data.php", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var userData = JSON.parse(xhr.responseText);
+                            // Update user name
+                            document.getElementById("userName").textContent = userData.full_name;
+                            // Update user email
+                            document.getElementById("userEmail").textContent = userData.email;
+                        } catch (e) {
+                            console.error("Error parsing JSON: " + e.message);
+                        }
+                    } else {
+                        console.error("Error fetching user data. Status code: " + xhr.status);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        // Call the getUserData function to fetch and update user data
+        getUserData();
+    });
+
+
+</script>
