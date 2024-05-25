@@ -31,6 +31,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Log in</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -121,6 +124,9 @@
             if (xhr.readyState === 4 && xhr.status === 200) {
                 console.log(xhr.responseText);
                 document.getElementById("status").innerHTML = "Account created successfully";
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 3000);
             }
         };
 

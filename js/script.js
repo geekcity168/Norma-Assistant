@@ -67,40 +67,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById("openBankButton").addEventListener("click", function() {
         bankPopupOverlay.style.display = "block";
         bankPopup.style.display = "block";
-    })
-
-    function checkBankDetails() {
-        var selectedBank = document.getElementById("bankSelect").value;
-        var accountNumber = document.getElementById("accountnumber").value;
-    
-        // Create FormData object to send form data
-        var formData = new FormData();
-        formData.append('bankName', selectedBank);
-        formData.append('accountNumber', accountNumber);
-    
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "add_bank_process.php", true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = xhr.responseText;
-                if (response === "success") {
-                    statusBar.style.display = "block";
-                    statusBar.innerHTML = "Account added successfully";
-                    bankName.innerHTML = selectedBank;
-                    accountNumber.innerHTML = accountNumber;
-                    setTimeout(closeStatus, 3500);
-                } else {
-                    alert("An error occurred while adding the bank account. Please try again.");
-                }
-            }
-        };
-        xhr.send(formData);
-    }
-    
-
-    function closeStatus() {
-        statusBar.style.display = "none";
-    }
+    });
 
     
     

@@ -35,10 +35,6 @@ document.getElementById("signupForm").addEventListener("submit", function(event)
 
                 sendFormData();
 
-                setTimeout(() => {
-                    window.location = "index.html";
-                }, 3000);
-
             }, 3600);
         }
 

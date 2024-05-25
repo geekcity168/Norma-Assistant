@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 $email = $_SESSION['email'];
 
 // Fetch user data from the database
-$sql = "SELECT full_name, email FROM users WHERE email = ?";
+$sql = "SELECT full_name, country, email FROM users WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -26,7 +26,6 @@ if ($result->num_rows > 0) {
     // Output user data as JSON
     echo json_encode($userData);
 } else {
-    // Return empty JSON object if user not found
     echo json_encode((object) []);
 }
 

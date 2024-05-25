@@ -12,41 +12,22 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the email address from the session
-$email = $_SESSION['email'];
+$data = json_decode(file_get_contents("php://input"));
 
-// Query to fetch user_id based on email
-$sql = "SELECT user_id FROM users WHERE email = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $email);
+$stmt = $conn->prepare("INSERT INTO users (full_name, email, password, country) VALUES (?, ?, ?, ?)");
+$stmt->bind_param("ssss", $fullname, $email, $password, $country);
+
+
+$fullname = $data->fullname;
+$email = $data->email;
+$password = password_hash($data->password, PASSWORD_DEFAULT); 
+$country = $data->country;
 $stmt->execute();
-$result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $userID = $row['user_id'];
+$_SESSION['email'] = $email;
 
-    // Retrieve other form data
-    $bankName = $_POST['bankName'];
-    $accountNumber = $_POST['accountNumber'];
-    $expirationDate = $_POST['expirationDate'];
-    $cvcCode = $_POST['cvcCode'];
-
-    // Insert data into the database
-    $sql = "INSERT INTO banks (bank_name, account_number, expiration_date, cvc_code, user_id) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssi", $bankName, $accountNumber, $expirationDate, $cvcCode, $userID);
-
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
-        echo "error";
-    }
-
-    $stmt->close();
-} else {
-    echo "error";
-}
-
+$stmt->close();
 $conn->close();
+
+echo "Signup successful!";
 ?>

@@ -62,6 +62,7 @@
                         <div class="m-3 display-8" id="userEmail">
                             <!-- User email will be displayed here -->
                         </div>
+                        <div class="m-3 display-8" id="userCountry"></div>
                         <hr>
                         <div class="m-3 p-3 bottom-acc-profile">
                             <p class="mb-3">Connect to account</p>
@@ -69,8 +70,8 @@
                             <div id="bankLists">
                                 <div class="p-3 mb-3 custom-div">
                                     <ul class="custom-list">
-                                        <li id="bankName">KCB Bank</li>
-                                        <li id="accountName">John Doe</li>
+                                        <li id="bankName"></li>
+                                        <li id="accountName"></li>
                                         <li id="accountNumber"></li>
                                         
                                     </ul>
@@ -80,8 +81,8 @@
                             <div id="bankLists">
                                 <div class="p-3 mb-3 custom-div">
                                     <ul class="custom-list">
-                                        <li id="mobileService">MPESA</li>
-                                        <li id="mobileNumber">0700000000</li>
+                                        <li id="mobileService"></li>
+                                        <li id="mobileNumber"></li>
                                     </ul>
                                 </div>
                             </div>
@@ -270,8 +271,8 @@
             console.log("Success");
 
 
-            var mobilePlatform = document.getElementById("mobile-platform");
-            var mobilePhone = document.getElementById("mobile-phone");
+            var mobilePlatform = document.getElementById("mobile-platform").value;
+            var mobilePhone = document.getElementById("mobile-phone").value;
 
             if (mobilePhone.value == "") {
                 alert("Please enter mobile number");
@@ -284,28 +285,49 @@
                 mobileLoad.style.display = "inline-block";
                 mobileLoadSatus.style.display = "inline-block";
 
-                setTimeout(() => {
-                    mobileLoad.style.display = "none";
-                    mobileLoadSatus.style.display = "none";
+                    var formData = new FormData();
+                    formData.append('mobilePlatform', mobilePlatform);
+                    formData.append('mobilePhone', mobilePhone);
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "php/add_mobile_process.php", true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = xhr.responseText;
+                            console.log("Server response:", response);
+                            if (response.trim() === "success") {
+                                statusBar.style.display = "block";
+                                statusBar.innerHTML = "Account added successfully";
+                                setTimeout(() => {
+                                    mobileLoad.style.display = "none";
+                                    mobileLoadSatus.style.display = "none";
 
 
-                    closeMobileWindow();
+                                    closeMobileWindow();
+                                    window.location.reload();
 
-                    document.getElementById("mobileService").innerHTML = mobilePlatform.value;
-                    document.getElementById("mobileNumber").innerHTML = mobilePhone.value;
+                                    document.getElementById("mobileService").innerHTML = mobilePlatform.value;
+                                    document.getElementById("mobileNumber").innerHTML = mobilePhone.value;
 
-                    statusBar.style.display = "block";
-                    statusBar.innerHTML = "Mobile Account added successfully";
-
-
-
-                    setInterval(() => {
-                        statusBar.style.display = "none";
-                    }, 3500);
+                                    statusBar.style.display = "block";
+                                    statusBar.innerHTML = "Mobile Account added successfully";
 
 
-                    
-                }, 5600);
+
+                                    setInterval(() => {
+                                        statusBar.style.display = "none";
+                                    }, 3500);
+
+
+                                    
+                                }, 5600);
+                            } else {
+                                alert("An error occurred while adding the bank account. Please try again.");
+                            }
+                        }
+                    };
+                    xhr.send(formData);
+                
             }
             
         });
@@ -313,7 +335,6 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Function to retrieve user data via AJAX
         function getUserData() {
             var xhr = new XMLHttpRequest();
             xhr.open("GET", "php/get_user_data.php", true);
@@ -322,10 +343,9 @@
                     if (xhr.status === 200) {
                         try {
                             var userData = JSON.parse(xhr.responseText);
-                            // Update user name
                             document.getElementById("userName").textContent = userData.full_name;
-                            // Update user email
                             document.getElementById("userEmail").textContent = userData.email;
+                            document.getElementById("userCountry").textContent = userData.country;
                         } catch (e) {
                             console.error("Error parsing JSON: " + e.message);
                         }
@@ -336,10 +356,99 @@
             };
             xhr.send();
         }
-
-        // Call the getUserData function to fetch and update user data
         getUserData();
     });
+
+    //Add Bank details
+
+    function checkBankDetails() {
+        var selectedBank = document.getElementById("bankSelect").value;
+        var accountNumber = document.getElementById("accountnumber").value;
+        var expirationDate = document.getElementById("expiry").value;
+        var cvcCode = document.getElementById("cvc").value;
+
+        // Create FormData object to send form data
+        var formData = new FormData();
+        formData.append('bankName', selectedBank);
+        formData.append('accountNumber', accountNumber);
+        formData.append('expirationDate', expirationDate);
+        formData.append('cvcCode', cvcCode);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "php/add_bank_process.php", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                console.log("Server response:", response);
+                if (response.trim() === "success") {
+                    statusBar.style.display = "block";
+                    statusBar.innerHTML = "Account added successfully";
+                    bankName.innerHTML = selectedBank;
+                    accountNumber.innerHTML = accountNumber;
+                    setTimeout(() => {
+                        statusBar.style.display = "none";
+                        bankPopupOverlay.style.display = "none";
+                        bankPopup.style.display = "none";
+                    }, 3500);
+                } else {
+                    alert("An error occurred while adding the bank account. Please try again.");
+                }
+            }
+        };
+        xhr.send(formData);
+    }
+    function closeStatus() {
+        statusBar.style.display = "none";
+    }
+
+
+    //Display bank details
+
+    document.addEventListener("DOMContentLoaded", function() {
+        displayBankDetails();
+        displayMobileDetails();
+    });
+
+    function displayBankDetails() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "php/get_bank_details.php", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.error) {
+                    console.error(response.error);
+                    alert("An error occurred while fetching bank details.");
+                } else {
+                    document.getElementById("bankName").textContent = response.bank_name;
+                    document.getElementById("accountName").textContent = response.full_name;
+                    document.getElementById("accountNumber").textContent = response.account_number;
+                }
+            }
+        };
+        xhr.send();
+    }
+
+    function displayMobileDetails() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "php/get_mobile_details.php", true);
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if(response.error) {
+                    console.error(response.error);
+                    alert("Error fetching mobile accounts");
+                } else {
+                    document.getElementById("mobileService").textContent = response.mobile_platform;
+                    document.getElementById("mobileNumber").textContent = response.mobile_number;
+                }
+            }
+        };
+        xhr.send();
+    }
+
+
+
+
 
 
 </script>
