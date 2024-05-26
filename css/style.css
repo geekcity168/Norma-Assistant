@@ -1,5 +1,27 @@
 
+.navbar {
+    background-color: #011d3d !important;
+}
 
+.navbar a {
+    color: #fff !important;
+}
+
+.dropdown-menu {
+    background-color: #011d3d;
+}
+
+.dropdown-menu li a:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.navbar-toggler-icon {
+    color: #f0f0f0 !important;
+    
+}
+.navbar-toggler-icon:focus {
+    border: solid 2px #fff;
+}
 .navbar-brand img {
     width: 40px;
     height: auto; 

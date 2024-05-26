@@ -102,7 +102,7 @@
                         <div class="m-1 p-2 balances-cont">
                             <h3 class="m-1 fs-5 display-6">Outstanding Balance</h3>
                             <div class="mb-3  out-balance">
-                                <div class="fs-4 display-8" id="staticBalance">Ksh.0</div>
+                                <div class="fs-4 display-8" id="accountBalance">Ksh.0</div>
                                 <span id="percentChange">0%</span>
                             </div>
                             <h3 class="m-1 fs-5 display-6">Mobile Account Balance</h3>
@@ -113,31 +113,8 @@
                     </div>
                     <h3 class="m-3 fs-5 display-8">Transaction tracks</h3>
                     <div class="mt-3 mb-3 account-track receipts">
-                        <div class="list-group">
-                            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                              <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Withdrawal</h5>
-                                <small>3 days ago</small>
-                              </div>
-                              <p class="mb-1">Transaction Code: Not Avaiable</p>
-                              <small>Amount Ksh.<span id="transAmount">370</span></small>
-                            </a>
-                            <a href="#" class="list-group-item list-group-item-action" aria-current="true">
-                                <div class="d-flex w-100 justify-content-between">
-                                  <h6 class="mb-1">Withdrawal</h5>
-                                  <small>5 days ago</small>
-                                </div>
-                                <p class="mb-1" id="des">Withdrawn from Bank Account</p>
-                                <small>Amount Ksh.<span id="transAmount">370</span></small>
-                              </a>
-                            <a href="#" class="list-group-item list-group-item-action">
-                              <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Deposit</h5>
-                                <small class="text-body-secondary">18 days ago</small>
-                              </div>
-                              <p class="mb-1">Deposited into Mobile Account</p>
-                              <small>Amount Ksh.<span id="transAmount">370</span></small>
-                            </a>
+                        <div class="list-group" id="receiptsContainer">
+                            
                         </div>
                     </div>
                 </div>
@@ -407,6 +384,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         displayBankDetails();
         displayMobileDetails();
+        getAccountData();
     });
 
     function displayBankDetails() {
@@ -445,6 +423,85 @@
         };
         xhr.send();
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+function getAccountData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "php/get_account_data.php", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                try {
+                    var accountData = JSON.parse(xhr.responseText);
+                    document.getElementById("accountBalance").textContent = "Account Balance: Ksh." + accountData.account_balance;
+                    fetchTransactionsAndUpdateReceipts(accountData);
+                } catch (e) {
+                    console.error("Error parsing JSON: " + e.message);
+                }
+            } else {
+                console.error("Error fetching account data. Status code: " + xhr.status);
+            }
+        }
+    };
+    xhr.send();
+}
+
+function fetchTransactionsAndUpdateReceipts(accountData) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "php/get_transactions.php", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var transactions = JSON.parse(xhr.responseText);
+                updateReceipts(transactions, accountData);
+            } catch (e) {
+                console.error("Error parsing JSON: " + e.message);
+            }
+        }
+    };
+    xhr.send();
+}
+
+function formatDate(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    return (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + year;
+}
+
+function calculatePercentageChange(transactionAmount, accountBalance) {
+    return ((transactionAmount / accountBalance) * 100).toFixed(2);
+}
+
+function updateReceipts(transactions, accountData) {
+    var receiptsContainer = document.getElementById("receiptsContainer");
+    receiptsContainer.innerHTML = ""; // Clear previous receipts
+
+    // Iterate through transactions and create receipts
+    transactions.forEach(function(transaction) {
+        var receipt = document.createElement("a");
+        receipt.setAttribute("class", "list-group-item list-group-item-action");
+        receipt.setAttribute("href", "#");
+        var date = new Date(transaction.transaction_date); // Convert timestamp to milliseconds
+        var dateString = formatDate(date);
+        var timeString = date.toLocaleTimeString();
+        var percentageChange = calculatePercentageChange(transaction.amount, accountData.account_balance);
+        document.getElementById("percentChange").textContent = `${percentageChange}%`;
+        receipt.innerHTML = `
+            <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">${transaction.transaction_type}</h6>
+                <small>${dateString} ${timeString}</small>
+            </div>
+            <p class="mb-1">Transaction Code: ${transaction.transaction_code}</p>
+            <small>Amount: Ksh.${transaction.amount}</small>
+        `;
+        receiptsContainer.appendChild(receipt);
+    });
+}
+
+getAccountData();
+});
 
     
 
